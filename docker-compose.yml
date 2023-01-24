@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+
+  web:
+    container_name: web
+    build: ./docker-file/web/
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html/
+      - ./docker-file/web/000-default.conf:/etc/apache2/sites-available/000-default.conf
+  db:
+    container_name: mysql
+    image: mysql:8.0
+    restart: unless-stopped
+    tty: true
+    ports:
+        - "3306:3306"
+    environment:
+        MYSQL_DATABASE: upstart
+        MYSQL_USER: laravel
+        MYSQL_PASSWORD: upstartpassworddb
+        MYSQL_ROOT_PASSWORD: rootpasswordmysql
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    ports:
+    - '8888:80'
+    environment:
+    - PMA_ARBITRARY=1
+    - PMA_HOST=db
+    depends_on:
+    - db
+
+  swagger:
+    container_name: swagger-ui
+    image: swaggerapi/swagger-ui
+    volumes:
+      - ./swagger-docs/swagger.json:/usr/share/nginx/html/swagger.json
+    environment:
+      API_URL: swagger.json
+    ports:
+      - "8081:8080"

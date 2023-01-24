@@ -1,0 +1,410 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Upstart API Specification",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/v1/categories": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Get Categories",
+                "description": "Get all  categories",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/categories/id": {
+            "get": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Get Category by id",
+                "description": "Get all  categories",
+                "produces": [
+                    "application/json"
+                ],
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/categories/create": {
+            "post": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Create Categories",
+                "description": "Create the new category.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "categories": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "category_info": {
+                                                "properties": {
+                                                    "title": {
+                                                        "required": true,
+                                                        "type": "string"
+                                                    },
+                                                    "language_id": {
+                                                        "required": true,
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "ordering": {
+                                                "required": true,
+                                                "type": "integer"
+                                            },
+                                            "parent_id": {
+                                                "required": true,
+                                                "type": "integer"
+                                            },
+                                            "icon": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "403": {
+                        "description": "Forbidden Error"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/categories/update": {
+            "put": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Update Categories",
+                "description": "Create the new category.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "categories": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "category_info": {
+                                                "properties": {
+                                                    "title": {
+                                                        "required": true,
+                                                        "type": "string"
+                                                    },
+                                                    "language_id": {
+                                                        "required": true,
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            },
+                                            "ordering": {
+                                                "required": true,
+                                                "type": "integer"
+                                            },
+                                            "parent_id": {
+                                                "required": true,
+                                                "type": "integer"
+                                            },
+                                            "category_id": {
+                                                "required": true,
+                                                "type": "integer"
+                                            },
+                                            "icon": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "403": {
+                        "description": "Forbidden Error"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/categories/delete": {
+            "delete": {
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Delete Categories",
+                "description": "Delete category.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "ids": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "403": {
+                        "description": "Forbidden Error"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/registration": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "User registration",
+                "description": "Register the user information.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "User",
+                        "in": "body",
+                        "description": "List of user object",
+                        "schema": {
+                            "properties": {
+                                "email": {
+                                    "description": "User Email",
+                                    "type": "string"
+                                },
+                                "first_name": {
+                                    "description": "User first name",
+                                    "type": "string"
+                                },
+                                "last_name": {
+                                    "description": "User name",
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "description": "User Password",
+                                    "type": "string"
+                                },
+                                "role_id": {
+                                    "description": "User role ID",
+                                    "type": "integer"
+                                },
+                                "company_name": {
+                                    "description": "User conpany name",
+                                    "type": "string"
+                                },
+                                "tax_identity_number": {
+                                    "description": "User tax identity number",
+                                    "type": "integer "
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "401 Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/v1/login": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "User login",
+                "description": "User login",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "User",
+                        "in": "body",
+                        "description": "List of username and password",
+                        "schema": {
+                            "properties": {
+                                "email": {
+                                    "description": "User Email",
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "description": "User Password",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorized error"
+                    }
+                }
+            }
+        },
+        "/api/v1/forgot-password": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Forgot password",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "User",
+                        "in": "body",
+                        "description": "",
+                        "schema": {
+                            "properties": {
+                                "email": {
+                                    "description": "User Email",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/v1/reset-password": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Reset password",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "User",
+                        "in": "body",
+                        "description": "",
+                        "schema": {
+                            "properties": {
+                                "email": {
+                                    "description": "User Email",
+                                    "type": "string"
+                                },
+                                "token": {
+                                    "description": "Token",
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "description": "Password",
+                                    "type": "string"
+                                },
+                                "password_confirmation": {
+                                    "description": "Password confirmation",
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {}
+}

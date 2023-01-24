@@ -1,0 +1,2917 @@
+---
+openapi: "3.0.0"
+info:
+  title: "Upstart API"
+  version: "1.0.0"
+paths:
+  /api/v1/user/list:
+    get:
+      tags:
+        - Admin dashboard
+      summary: "Get users list"
+      parameters:
+        - name: search_text
+          in: query
+          schema:
+            type: string
+            example: 'Gegham'
+        - name: role_id
+          in: query
+          schema:
+            type: string
+            example: "1,2"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            example: 5
+        - name: page
+          in: query
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: 'Users list'
+        403:
+          description: 'Permission denied'
+      security:
+        - bearerAuth: [ ]
+  /api/v1/user/create:
+    post:
+      tags:
+        - Admin dashboard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+                role_id:
+                  type: integer
+                  description: 'Only 1(Superadmin role) or 2(Moderator)'
+                language_code:
+                  type: string
+      responses:
+        200:
+          description: 'asdasd'
+      security:
+        - bearerAuth: [ ]
+  /api/v1/user/{id}/delete:
+    delete:
+      tags:
+        - Admin dashboard
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: 'User successfully deleted'
+        404:
+          description: 'User not found'
+        403:
+          description: 'Permission denied'
+      security:
+        - bearerAuth: [ ]
+  /api/v1/course/list:
+    get:
+      tags:
+        - Admin dashboard
+      summary: "Get courses list"
+      parameters:
+        - name: search_text
+          in: query
+          schema:
+            type: string
+            example: 'Web'
+        - name: status
+          in: query
+          schema:
+            type: string
+            example: "1,2"
+        - name: type
+          in: query
+          schema:
+            type: string
+            example: "1,2"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            example: 5
+        - name: page
+          in: query
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: 'Course list'
+        403:
+          description: 'Permission denied'
+      security:
+        - bearerAuth: [ ]
+  /api/v1/course/{id}/change-status:
+    post:
+      tags:
+        - Admin dashboard
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            example: 1
+        - name: status_code
+          in: query
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: 'Course successfully approved'
+        404:
+          description: 'Course not found'
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/trainer/list:
+    get:
+      tags:
+        - Admin dashboard
+      summary: "Get trainers list"
+      responses:
+        200:
+          description: 'Trainers list'
+        403:
+          description: 'Permission denied'
+      security:
+        - bearerAuth: [ ]
+  /api/v1/trainer/{id}:
+    get:
+      tags:
+        - Admin dashboard
+      summary: "Get trainer by id"
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            example: 89
+      responses:
+        200:
+          description: 'Trainer information'
+        403:
+          description: 'Permission denied'
+        404:
+          description: 'Not found'
+      security:
+        - bearerAuth: [ ]
+  /api/v1/students/list:
+    get:
+      tags:
+        - Admin dashboard
+      responses:
+        200:
+          description: 'Returned course_id and user data who bought your courses'
+        403:
+          description: 'Permission denied'
+      security:
+        - bearerAuth: [ ]
+  /api/v1/get-languages:
+    get:
+      tags:
+        - "General"
+      summary: "Get Languages"
+      operationId: "Languages"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  properties:
+                    id:
+                      type: "string"
+                    short_tag:
+                      type: "string"
+                    ordering:
+                      type: "integer"
+                    title:
+                      type: "string"
+                    icon:
+                      type: "string"
+                    is_default:
+                      type: "integer"
+        "403":
+          description: "Forbidden Error"
+  /api/v1/my-learnings:
+    get:
+      tags:
+        - "General"
+      responses:
+        200:
+          description: 'Returns user bought courses'
+        401:
+          description: 'Unauthorized'
+        404:
+          description: "Not found courses"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/file-upload:
+    post:
+      tags:
+        - "General"
+      summary: "File Upload"
+      operationId: "upload"
+      requestBody:
+        description: Upload image
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: "Upload file"
+                location:
+                  type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                  properties:
+                    path:
+                      type: "string"
+                    url:
+                      type: "string"
+        "403":
+          description: "Forbidden Error"
+  /api/v1/course-details/{id}:
+    get:
+      tags:
+        - "General"
+      operationId: "getCourseById"
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            example: 1004
+      responses:
+        "200" :
+          description: returned data about course
+  /api/v1/home-page-statistics:
+    get:
+      tags:
+        - "General"
+      operationId: 'HomePageStatics'
+      responses:
+        200:
+          description: Returned data
+  /api/v1/user-review/{id}:
+    get:
+      tags:
+        - "General"
+      operationId: "UserReviews"
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            example: 1000
+      responses:
+        "200" :
+          description: "User courses reviews"
+        "403" :
+          description: "No available user reviews"
+  /api/v1/subscribe:
+    post:
+      tags:
+        - "General"
+      operationId: "Subscribe"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+      responses:
+        "200" :
+          description: "You have successfully subscribed"
+        "403" :
+          description: "Enter valid email"
+  /api/v1/course/{course_id}/reviews:
+    get:
+      tags:
+        - "General"
+      operationId: "getCourseReviews"
+      parameters:
+        - name: course_id
+          in: path
+          schema:
+            type: integer
+            example: 1000
+      responses:
+        200:
+          description: 'Course reviews list'
+        401:
+          description: 'Unauthorized'
+  /api/v1/get-roles:
+    get:
+      tags:
+        - "General"
+      summary: "Get Roles"
+      operationId: "Roles"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                  properties:
+                    id:
+                      type: "string"
+                    title:
+                      type: "string"
+        "403":
+          description: "Forbidden Error"
+  /api/v1/course-types:
+    get:
+      tags:
+        - "General"
+      summary: "Get Course Types"
+      operationId: "Types"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                  properties:
+                    type:
+                      type: integer
+
+  /api/v1/course-levels:
+    get:
+      tags:
+        - "General"
+      summary: "Get Course levels"
+      operationId: "levels"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                 properties:
+                    level:
+                      type: integer
+  /api/v1/course-statuses:
+    get:
+      tags:
+        - "General"
+      summary: "Get Course statuses"
+      operationId: "statuses"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  properties:
+                    status:
+                      type: integer
+
+  /api/v1/autocompletes/{text}:
+    get:
+      tags:
+        - "General"
+      summary: "Get autocompletes"
+      operationId: "Autocomplete"
+      parameters:
+        - name: "text"
+          in: path
+          required: true
+          schema:
+            type: "string"
+        - name: language_code
+          in: header
+          schema:
+            type: string
+            example: hy
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+        "403":
+          description: "Forbidden Error"
+  /api/v1/search:
+    get:
+      tags:
+        - General
+      summary: "Get search result"
+      operationId: "Search"
+      parameters:
+        - name: "language_code"
+          in: query
+          schema:
+            type: string
+            example: en
+        - name: "level"
+          in: query
+          schema:
+            type: integer
+            example: 1
+        - name: "type"
+          in: query
+          schema:
+            type: integer
+            example: 1
+        - name: "price_from"
+          in: query
+          schema:
+            type: integer
+            example: 0
+        - name: "price_to"
+          in: query
+          schema:
+            type: integer
+            example: 1000
+        - name: "currency"
+          in: query
+          schema:
+            type: string
+            example: "AMD"
+        - name: "categories"
+          in: query
+          schema:
+            type: string
+            example: "1,2,3"
+        - name: "search_text"
+          in: query
+          schema:
+            type: string
+            example: "php"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/get-notifications:
+    get:
+      tags:
+        - "General"
+      summary: "Get Notifications"
+      description: This request is  for logged in users. In  the request headers  need set user api_token as the bearer token.
+      operationId: "Notifications"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Notification'
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/get-new-notifications:
+    get:
+      tags:
+        - "General"
+      summary: "Get Notifications"
+      description: This request is  for logged in users. In  the request headers  need set user api_token as the bearer token.
+      operationId: "NewNotifications"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Notification'
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/change-notification-status:
+    get:
+      tags:
+        - "General"
+      summary: "Change notification status"
+      description: This request is  for logged in users. In  the request headers  need set user api_token as the bearer token.
+      operationId: "ChangeNotification"
+      parameters:
+        - name: "id"
+          in: query
+          schema:
+            type: string
+            example: 1
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/notification/remove/{id}:
+    delete:
+      tags:
+        - "General"
+      summary: "Remove notification by id"
+      description: "Remove notification by id"
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200" :
+          description: "Notification removed successfully"
+        "402" :
+          description: "Notification not found"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/get-unread-notifications-count:
+    get:
+      tags:
+        - Notifications
+      summary: "Get unread notifications count"
+      responses:
+        200:
+          description: "Returned unread notifications count"
+        403:
+          description: 'Unauthorized'
+      security:
+        - bearerAuth: [ ]
+  /api/v1/get-last-notifications:
+    get:
+      tags:
+        - Notifications
+      summary: "Get last notifications"
+      responses:
+        200:
+          description: "Returned last notifications"
+        403:
+          description: 'Unauthorized'
+      security:
+        - bearerAuth: [ ]
+  /api/v1/{trainer_id}/courses:
+    get:
+      tags:
+        - "General"
+      summary: "Get trainer with his courses"
+      description: "Get trainer with his courses"
+      operationId: "TrainerCourses"
+      parameters:
+        - name: trainer_id
+          in: path
+          schema:
+            type: integer
+            example: 1000
+      responses:
+        "200":
+          description: "Trainer courses"
+        "403" :
+          description: "User not found/Permission denied!"
+  /api/v1/mark-as-read:
+    post:
+      tags:
+        - "General"
+      summary: 'Mark as read'
+      operationId: "markAsRead"
+      parameters:
+        - name: language_code
+          in: header
+          schema:
+            type: string
+            example: 'hy'
+      responses:
+        "200":
+          description: "Notifications marked as read."
+        "401":
+          description: "Unauthorized"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/registration:
+    post:
+      tags:
+        - "Auth"
+      summary: "Register"
+      operationId: "register"
+      requestBody:
+       content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              first_name:
+                type: string
+              last_name:
+                type: string
+              email:
+                type: string
+              phone:
+                type: string
+              password:
+                type: string
+              role_id:
+                type: integer
+              company_name:
+                type: string
+                default: ""
+              tax_identity_number:
+                type: integer
+                default: 0
+              language_code:
+                type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: "integer"
+                  first_name:
+                    type: "string"
+                  last_name:
+                    type: "string"
+                  email:
+                    type: "string"
+                  role_id:
+                    type: "integer"
+                  company_name:
+                    type: "string"
+                  tax_identity_number:
+                    type: "integer"
+                type: "object"
+        "401":
+          description: "Unauthenticated"
+  /api/v1/social/login:
+    post:
+      tags:
+        - "Auth"
+      summary: "Social login"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+                company_name:
+                  type: string
+                tax_identity_number:
+                  type: string
+                role_id:
+                  type: string
+                avatar:
+                  type: string
+                provider:
+                  type: string
+                  description: "google or facebook"
+                email:
+                  type: string
+                  description: "Unique"
+                unique_id:
+                  type: string
+      responses:
+        200:
+          description: ""
+        500:
+          description: 'Invalid provider'
+  /api/v1/update/user:
+    post:
+      tags:
+        - "Auth"
+      summary: "Update user"
+      operationId: "updateUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: Gaspar
+                last_name:
+                  type: string
+                  example: Sargsyan
+                email:
+                  type: string
+                  example: gasparsargsyan@gmail.com
+                company_name:
+                  type: string
+                  default: null
+                tax_identity_number:
+                  type: number
+                  default: null
+                current_password:
+                  type: string
+                  default: null
+                new_password:
+                    type: string
+                    default: null
+                language_code:
+                  type: string
+                  default: hy
+      responses:
+        "200":
+          description: "Successfully updated"
+        "400":
+          description: "Invalid data"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/login:
+    post:
+      tags:
+        - "Auth"
+      summary: "Login"
+      operationId: "login"
+      parameters:
+        - name: "email"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "password"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: "integer"
+                  first_name:
+                    type: "string"
+                  last_name:
+                    type: "string"
+                  email:
+                    type: "string"
+                  role_id:
+                    type: "integer"
+                  company_name:
+                    type: "string"
+                  tax_identity_number:
+                    type: "integer"
+                  api_token:
+                    type: "string"
+                type: "object"
+        "401":
+          description: "Unauthenticated"
+  /api/v1/get-current-user:
+    get:
+      tags:
+        - "General"
+      summary: "Get current user"
+      description: This request is only for logged in users. In  the request headers  need to set user api_token as the bearer token.
+      operationId: "currentUser"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: "integer"
+                  first_name:
+                    type: "string"
+                  last_name:
+                    type: "string"
+                  email:
+                    type: "string"
+                  role_id:
+                    type: "integer"
+                  company_name:
+                    type: "string"
+                  tax_identity_number:
+                    type: "integer"
+                  api_token:
+                    type: "string"
+                  avatar:
+                    type: string
+                type: "object"
+        "401":
+          description: "Unauthenticated"
+      security:
+       - bearerAuth: [ ]
+  /api/v1/forgot-password:
+    post:
+      tags:
+        - "Auth"
+      summary: "Frogot Password"
+      operationId: "forgot-password"
+      parameters:
+        - name: "email"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      responses:
+        "201":
+          description: "Success"
+          content:
+            application/json: { }
+        "401":
+          description: "Unauthenticated"
+  /api/v1/check-password:
+    post:
+      tags:
+        - "Auth"
+      summary: "Check user Password"
+      operationId: "check-password"
+      parameters:
+        - name: "password"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "201":
+          description: "Success"
+          content:
+            application/json: { }
+        "401":
+          description: "Unauthenticated"
+      security:
+       - bearerAuth: [ ]
+  /api/v1/reset-password:
+    post:
+      tags:
+        - "Auth"
+      summary: "Reset Password"
+      operationId: "resert-password"
+      parameters:
+        - name: "email"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "password"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "password_confirmation"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "token"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      responses:
+        "201":
+          description: "Success"
+          content:
+            application/json: { }
+        "401":
+          description: "Unauthenticated"
+  /api/v1/logout:
+    post:
+      tags:
+        - "Auth"
+      summary: "Logout"
+      operationId: "Logout"
+      responses:
+        "200":
+          description: "User successfully logged out"
+        "401":
+          description: "Unauthenticated"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/categories:
+    get:
+      tags:
+        - "Category"
+      summary: "Get Categories"
+      operationId: "Category"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: en
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  properties:
+                    id:
+                      type: "integer"
+                    parent_id:
+                      type: "integer"
+                    ordering:
+                      type: "integer"
+                    title:
+                      type: "string"
+                    icon:
+                      type: "string"
+                    child:
+                      type: "array"
+                      items:
+                        properties:
+                          id:
+                            type: "integer"
+                          parent_id:
+                            type: "integer"
+                          ordering:
+                            type: "integer"
+                          title:
+                            type: "string"
+                          icon:
+                            type: "string"
+                        type: "object"
+                  type: "object"
+        "401":
+          description: "Unauthenticated"
+  /api/v1/categories/{course_id}:
+    get:
+      tags:
+        - "Category"
+      summary: "Get Categories"
+      operationId: "CategoryByID"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: en
+        - name: course_id
+          in: path
+          schema:
+            type: "integer"
+            example: 1
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: "integer"
+                  parent_id:
+                    type: "integer"
+                  ordering:
+                    type: "integer"
+                  title:
+                    type: "string"
+                  icon:
+                    type: "string"
+                  child:
+                    type: "array"
+                    items:
+                      properties:
+                        id:
+                          type: "integer"
+                        parent_id:
+                          type: "integer"
+                        ordering:
+                          type: "integer"
+                        title:
+                          type: "string"
+                        icon:
+                          type: "string"
+                      type: "object"
+                type: "object"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/categories/create:
+    post:
+      tags:
+        - "Category"
+      summary: "Create Categories"
+      operationId: "CreateCategory"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      requestBody:
+        description: Create categories.This request is only for super Admin users. In  the request headers  need set user api_token as the bearer token.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categories:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Category'
+
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      responses:
+        "200":
+          description: "Category created successfully"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/categories/update:
+    post:
+      tags:
+        - "Category"
+      summary: "Update Categories"
+      operationId: "UpdateCategory"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      requestBody:
+        description: Update categories.This request is only for super Admin users. In  the request headers  need set user api_token as the bearer token.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categories:
+                  type: array
+                  items:
+                     properties:
+                          id:
+                            type: integer
+                            format: int64
+                            example: 10
+                            description: If the category is parent  category need send 0
+                          parent_id:
+                            type: integer
+                            format: int64
+                            example: 10
+                          ordering:
+                            type: integer
+                            format: int64
+                            example: 10
+                          category_info:
+                            type: array
+                            xml:
+                              wrapped: true
+                            items:
+                              type: object
+                              properties:
+                                title:
+                                  type: string
+                                  example: Development
+                                language_code:
+                                  type: string
+                                  example: "hy"
+
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      responses:
+        "200":
+          description: "Category created successfully"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/categories/delete:
+    delete:
+      tags:
+        - "Category"
+      summary: "Delete Category by ID"
+      operationId: "DeleteCategoryByID"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  items:
+                    type: integer
+                    example: 1
+
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      responses:
+        "200":
+          description: "Category deleted successfully"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/courses:
+    get:
+      tags:
+        - "Course"
+      summary: "Get Courses"
+      operationId: "Courses"
+      parameters:
+        - name: "category_id"
+          in: "query"
+          schema:
+            type: "string"
+            example: 1
+        - name: "page"
+          in: "query"
+          schema:
+            type: "integer"
+            example: 1
+
+        - name: "limit"
+          in: "query"
+          schema:
+            type: "integer"
+            example: 1
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Course'
+        "401":
+          description: "Unauthenticated"
+  /api/v1/course-preview/{course_id}:
+    get:
+      tags:
+        - "Course"
+      summary: "Get not deleted course by id"
+      description: "Get not deleted course by id"
+      parameters:
+        - name: course_id
+          in: path
+          schema:
+            type: integer
+            example: 1004
+      responses:
+        "200" :
+          description: "Returned data"
+        "401":
+          description: "Unauthorized"
+        "404":
+          description: "Not found or deleted"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/courses/get-user-courses:
+    get:
+      tags:
+        - "Course"
+      summary: "Get User  Courses"
+      description: This request is  for logged in users. In  the request headers  need set user api_token as the bearer token.
+      operationId: "UserCourses"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Course'
+        "401":
+          description: "Unauthenticated"
+      security:
+          - bearerAuth: [ ]
+  /api/v1/courses/{course_id}:
+    get:
+      tags:
+        - "Course"
+      summary: "Get Course by ID"
+      operationId: "CategoryByID"
+      parameters:
+        - name: "language_code"
+          in: path
+          schema:
+            type: "string"
+            example: hy
+        - name: course_id
+          in: path
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                    example: 1
+                  category_id:
+                    type: integer
+                    format: int64
+                    example: 1
+                  trainer_id:
+                    type: integer
+                    format: int64
+                    example: 1
+                  title:
+                    type: string
+                    example: title course
+                  sub_title:
+                    type: string
+                    example: sub title course
+                  description:
+                    type: string
+                    example: description course
+                  language:
+                    type: integer
+                    example: 1
+                  status:
+                    type: integer
+                    example: 1
+                  price:
+                    type: integer
+                    example: 1.1
+                  max_participants:
+                    type: integer
+                    example: 1
+                  level:
+                    type: number
+                    example: 1.1
+                  currency:
+                    type: string
+                  promo_video:
+                    type: string
+                    format: binary
+                  cover_image:
+                    type: string
+                    format: binary
+                  lessons:
+                    type: array
+                    xml:
+                      wrapped: true
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                          example: Laravel
+                        course_id:
+                          type: integer
+                          example: 1
+                        duration:
+                          type: integer
+                          example: 1
+                        start_time:
+                          type: string
+                          example: 2022-10-10 10:12:00
+                  trainer:
+                    type: object
+                    properties:
+                      first_name:
+                        type: string
+                        example: Trainer
+                      last_name:
+                        type: string
+                        example: Trainer
+                      bio:
+                        type: string
+                        example: bio
+                      avatar:
+                        type: string
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/courses/create:
+    post:
+      tags:
+        - "Course"
+      summary: "Create Course"
+      operationId: "CreateCourse"
+      description: Create Course.This request is   for Trainer and Trainer Center  users. In  the request headers  need set user api_token as the bearer token.
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+        - name: "type"
+          in: "query"
+          schema:
+            type: "integer"
+            example: 1
+      responses:
+        "200":
+          description: "Course created successfully"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/courses/update:
+    post:
+      tags:
+        - "Course"
+      summary: "Update Course"
+      operationId: "UpdateCourse"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      requestBody:
+        description: Update Course.This request is   for Trainer and Trainer Center  users. In  the request headers  need set user api_token as the bearer token.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  example: 1
+                category_id:
+                  type: integer
+                  format: int64
+                  example: 1
+                trainer_id:
+                  type: integer
+                  example: 1
+                title:
+                  type: string
+                  example: title course
+                sub_title:
+                  type: string
+                  example: sub title course
+                description:
+                  type: string
+                  example: description course
+                language:
+                  type: integer
+                  example: 1
+                requirements:
+                  type: string
+                  example: "['HTML', 'CSS']"
+                will_learn:
+                  type: string
+                  example: "['JS', 'PHP']"
+                status:
+                  type: integer
+                  example: 1
+                price:
+                  type: integer
+                  example: 1.1
+                max_participants:
+                  type: integer
+                  example: 1
+                level:
+                  type: number
+                  example: 1
+                currency:
+                  type: string
+                promo_video:
+                  type: string
+                  format: binary
+                type:
+                  type: integer
+                  example: 1
+                cover_image:
+                  type: string
+                  format: binary
+                address:
+                  type: string
+                  format: binary
+                lessons:
+                  type: array
+                  xml:
+                    wrapped: true
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                        example: Laravel
+                      course_id:
+                        type: integer
+                        example: 1
+                      duration:
+                        type: integer
+                        example: 1
+                      start_time:
+                        type: string
+                        example: 2022-10-10 10:12:00
+                trainer:
+                  type: object
+                  properties:
+                    first_name:
+                      type: string
+                      example: Trainer
+                    last_name:
+                      type: string
+                      example: Trainer
+                    bio:
+                      type: string
+                      example: bio
+                    avatar:
+                      type: string
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Course'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Course'
+        required: true
+      responses:
+        "200":
+          description: "Course updated successfully"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/courses/create-section:
+    post:
+      tags:
+        - "Course"
+      summary: "Create Section"
+      operationId: "CreateCourseSection"
+      description: Create Section.This request is   for Trainer and Trainer Center  users. In  the request headers  need set user api_token as the bearer token.
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                course_id:
+                  type: integer
+
+      responses:
+        "200":
+          description: "Section created successfully"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/courses/update-section:
+    post:
+      tags:
+        - "Course"
+      summary: "Update Course"
+      operationId: "updateSection"
+      description: Update Section.This request is   for Trainer and Trainer Center  users. In  the request headers  need set user api_token as the bearer token.
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                title:
+                  type: string
+
+      responses:
+        "200":
+          description: "Course created successfully"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/courses/delete/{course_id}:
+    delete:
+      tags:
+        - "Course"
+      summary: "Delete Course by ID"
+      operationId: "DeleteByID"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+        - name: course_id
+          in: path
+          schema:
+            type: integer
+            example: 1008
+      responses:
+        "200":
+          description: "Course deleted successfully"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/courses/delete-section:
+    delete:
+      tags:
+        - "Course"
+      summary: "Delete Section by ID"
+      operationId: "DeleteSectionByID"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+      responses:
+        "200":
+          description: "Course deleted successfully"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/trainer/dashboard:
+    get:
+      tags:
+        - "Trainer"
+      description: "Get information about trainer courses"
+      responses:
+        200:
+          description: "Returned courses count"
+        403:
+          description: "Forbidden: Permission denied"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/trainers/get-user-trainers:
+    get:
+      tags:
+        - "Trainer"
+      summary: "GetTrainers"
+      operationId: "CategoryByID"
+      description: This request is   for Trainer and Trainer Center  users. In  the request headers  need set user api_token as the bearer token.
+
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trainer'
+        "403":
+          description: "Forbidden Error"
+
+      security:
+        - bearerAuth: [ ]
+  /api/v1/trainer/meta/{user_id}:
+    get:
+      tags:
+        - "Trainer Meta"
+      summary: "Get trainer meta data by user_id"
+      operationId: "Trainer Meta"
+      parameters:
+        - name: user_id
+          in: path
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: "Returned rainer meta data"
+        "401":
+          description: "Unauthorized"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/trainer/meta/save:
+    post:
+      tags:
+        - "Trainer Meta"
+      summary: "Update/Create trainer meta data on authenticated user id"
+      operationId: "Update trainer meta"
+      description: "es api-i jamanak inch tvyal uxarkeq ydike save kene. Ete ed usery chunecav meta tvyalner create kene, ete exav update kene. "
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: First name
+                last_name:
+                  type: string
+                  example: Last name
+                headline:
+                  type: string
+                  example: "Headline info"
+                bio:
+                  type: string
+                  example: "Bio part for trainer meta info"
+                links:
+                  type: object
+                  example: {
+                             "facebook":"https://www.facebook.com/",
+                             "linkedin":"https://www.linkedin.com/",
+                             "youtube":"https://www.youtube.com/",
+                             "twitter":"https://twitter.com/",
+                             "website":"https://upstart.brainfors.am/"
+                  }
+                avatar:
+                  type: string
+      responses:
+        "200":
+          description: 'Returned user data'
+        "401":
+          description: 'Unauthorized'
+      security:
+        - bearerAuth: [ ]
+  /api/v1/moderators:
+    get:
+      tags:
+        - "Moderator"
+      summary: "Get Moderators"
+      operationId: "Moderator"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Moderator'
+        "401":
+          description: "Unauthenticated"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/moderators/{id}:
+    get:
+      tags:
+        - "Moderator"
+      summary: "Get Moderator by ID"
+      operationId: "ModeratorByID"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+        - name: id
+          in: path
+          schema:
+            type: "integer"
+            example: 1
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Moderator'
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/moderators/create:
+    post:
+      tags:
+        - "Moderator"
+      operationId: "moderator"
+      description: This request is only for super Admin users. In  the request headers  need set user api_token as the bearer token.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Moderator'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Moderator'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Moderator'
+        required: true
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: "integer"
+                  first_name:
+                    type: "string"
+                  last_name:
+                    type: "string"
+                  email:
+                    type: "string"
+                  role_id:
+                    type: "integer"
+                  company_name:
+                    type: "string"
+                  tax_identity_number:
+                    type: "integer"
+                type: "object"
+        "401":
+          description: "Unauthenticated"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/moderators/update/{moderator_id}:
+    put:
+      tags:
+        - "Moderator"
+      operationId: "moderatorUpdate"
+      description: This request is only for super Admin users. In  the request headers  need set user api_token as the bearer token.
+      parameters:
+        - name: moderator_id
+          in: path
+          schema:
+            type: integer
+            example: 1007
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: First name
+                last_name:
+                  type: string
+                  example: Last name
+                email:
+                  type: string
+                  example: email@gmail.com
+                company_name:
+                  type: string
+                  default: "String"
+                tax_identity_number:
+                  type: number
+                  default: 0
+                language_code:
+                  type: string
+                  default: hy
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: "integer"
+                  first_name:
+                    type: "string"
+                  last_name:
+                    type: "string"
+                  email:
+                    type: "string"
+                  role_id:
+                    type: "integer"
+                  company_name:
+                    type: "string"
+                  tax_identity_number:
+                    type: "integer"
+                type: "object"
+        "401":
+          description: "Unauthenticated"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/moderators/delete:
+    delete:
+      tags:
+        - "Moderator"
+      summary: "Delete Moderator by ID"
+      operationId: "DeleteByID"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+      responses:
+        "200":
+          description: "Moderator deleted successfully"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/lessons:
+    get:
+      tags:
+        - "Lesson"
+      summary: "Get Lessons"
+      operationId: "Lesson"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Lesson'
+        "401":
+          description: "Unauthenticated"
+  /api/v1/lessons/get-section-lessons/{id}:
+    get:
+      tags:
+        - "Lesson"
+      summary: "Get Section Lessons"
+      operationId: "SectionLesson"
+      parameters:
+        - name: "id"
+          in: "path"
+          schema:
+            type: "integer"
+            example: 1000
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: '#/components/schemas/Lesson'
+        "401":
+          description: "Unauthenticated"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/lessons/{id}:
+    get:
+      tags:
+        - "Lesson"
+      summary: "Get Lesson by ID"
+      operationId: "LessonById"
+      parameters:
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+        - name: "id"
+          in: "path"
+          schema:
+            type: "integer"
+            example: 1000
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+        "401":
+          description: "Unauthenticated"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/lessons/create:
+    post:
+      tags:
+        - "Lesson"
+      operationId: "createLesson"
+      description: This request is TrainingCenter or Trainer users. In  the request headers  need set user api_token as the bearer token.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+        required: true
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+        "401":
+          description: "Unauthenticated"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/lessons/update:
+    put:
+      tags:
+        - "Lesson"
+      operationId: "updateLesson"
+      description: This request is TrainingCenter or Trainer users. In  the request headers  need set user api_token as the bearer token.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                id:
+                  type: "integer"
+                title:
+                  type: "string"
+                position:
+                  type: "integer"
+                video_url:
+                  type: "string"
+                article:
+                  type: "string"
+
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+        required: true
+
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+        "401":
+          description: "Unauthenticated"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/lessons/delete/{id}:
+    delete:
+      tags:
+        - "Lesson"
+      summary: "Delete Lesson by ID"
+      operationId: "DeletelessonByID"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Insert Quiz id
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - name: "language_code"
+          in: "query"
+          schema:
+            type: "string"
+            example: hy
+      responses:
+        "200":
+          description: "Moderator deleted successfully"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/quiz/{id}/questions:
+    get:
+      tags:
+        - Quiz
+      summary: Get all questions from quiz.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Insert Quiz id
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Server error!
+      security:
+        - bearerAuth: [ ]
+  /api/v1/quiz/update/:
+    put:
+      tags:
+        - Quiz
+      summary: Update quiz.
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: Insert Quiz id
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - name: course_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - name: section_id
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: position
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: title
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Server error!
+      security:
+        - bearerAuth: [ ]
+  /api/v1/quiz/delete/{id}:
+    post:
+      tags:
+        - Quiz
+      summary: Delete quiz.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Insert Quiz id
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Server error!
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/quiz/question/{id}:
+    get:
+      tags:
+        - Quiz question
+      summary: Get question by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Insert question id
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Server error!
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/quiz/question/create:
+    post:
+      tags:
+        - Quiz question
+      summary: Create question
+      requestBody:
+        description: Create question in quiz list.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Server error!
+      security:
+        - bearerAuth: [ ]
+  /api/v1/quiz/question/update/{id}:
+    post:
+      tags:
+        - Quiz question
+      summary: Update question
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Insert question id
+      requestBody:
+        description: Update current question by ID
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Server error!
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/quiz/question/delete/{id}:
+    post:
+      tags:
+        - Quiz question
+      summary: Delete question
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Insert question id
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Server error!
+      security:
+        - bearerAuth: [ ]
+
+
+  /api/v1/course/set-rate:
+    post:
+      tags:
+        - Rate course
+      summary: Rate or update course
+      requestBody:
+        description: Rate or update course
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_id:
+                  type: integer
+                  example: 1
+                rate:
+                  type: integer
+                  example: 5
+                message:
+                  type: string
+                  example: "Nice course"
+        required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Server error!
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/course/remove-rate:
+    post:
+      tags:
+        - Rate course
+      summary: Delete rate course
+      requestBody:
+        description: Delete rate course
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_id:
+                  type: integer
+                  example: 1
+        required: true
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Server error!
+      security:
+        - bearerAuth: [ ]
+  /api/v1/review/delete/{id}:
+    delete:
+      tags:
+        - Rate course
+      summary: Delete review by ID
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: 'Deleted successfully'
+        404:
+          description: 'Review not found'
+  /api/v1/wish/list:
+    get:
+      tags:
+        - "Wish list"
+      summary: "Get Wish list"
+      operationId: "Wish list"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                properties:
+                  user_id:
+                    type: integer
+                  course_id:
+                    type: integer
+                type: "object"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/wish/add:
+    post:
+      tags:
+        - "Wish list"
+      summary: "Add item in wish list"
+      operationId: "add item in wish list"
+      parameters:
+        - name: "user_id"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+        - name: "course_id"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+      requestBody:
+        description: Enter user_id and course_id for adding course in wish list
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                course_id:
+                  type: integer
+        required: true
+      responses:
+        "200":
+          description: "Course successfully added on wish list"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/wish/remove/{id}:
+    delete:
+      tags:
+        - "Wish list"
+      summary: "Remove course from wish list"
+      operationId: "Remove course from wish list"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: "integer"
+      responses:
+        "200":
+          description: "Course successfully removed from wish list"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ "3|P659FpSzUa4bg3TAGRDwq1dtHR0fTWi21gnn0tEn" ]
+
+  /api/v1/basket/list:
+    get:
+      tags:
+        - "Basket list"
+      summary: "Get Basket list"
+      operationId: "Basket list"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                properties:
+                  user_id:
+                    type: integer
+                  course_id:
+                    type: integer
+                type: "object"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/basket/add:
+    post:
+      tags:
+        - "Basket list"
+      summary: "Add item in basket list"
+      operationId: "add item in basket list"
+      parameters:
+        - name: "user_id"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+        - name: "course_id"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+      requestBody:
+        description: Enter user_id and course_id for adding course in basket list
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                course_id:
+                  type: integer
+        required: true
+      responses:
+        "200":
+          description: "Course successfully added on basket list"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/basket/remove/{id}:
+    post:
+      tags:
+        - "Basket list"
+      summary: "Remove course from basket list"
+      operationId: "Remove course from basket list"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: "integer"
+      responses:
+        "200":
+          description: "Course successfully removed from basket list"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/user/delete-avatar:
+    delete:
+      tags:
+        - "Auth"
+      summary: Delete user avatar
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Server error!
+      security:
+        - bearerAuth: [ ]
+  /api/v1/resources/create:
+    post:
+      tags:
+        - "Resource"
+      summary: "Create Resource"
+      operationId: "CreateResource"
+      description: This request is   for Trainer and Trainer Center  users. In  the request headers  need set user api_token as the bearer token.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                path:
+                  type: string
+
+      responses:
+        "200":
+          description: "Resource created successfully"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/resources/update:
+    put:
+      tags:
+        - "Resource"
+      summary: "Update resources"
+      operationId: "updateResources"
+      description: This request is   for Trainer and Trainer Center  users. In  the request headers  need set user api_token as the bearer token.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                title:
+                  type: string
+
+      responses:
+        "200":
+          description: "Course created successfully"
+
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/resources/{id}:
+    get:
+      tags:
+        - "Resource"
+      summary: "Get resource by ID"
+      operationId: "ResourcesByID"
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                    id:
+                      type: integer
+                    user_id:
+                      type: integer
+                    title:
+                      type: string
+                    path:
+                      type: string
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+  /api/v1/resources:
+    get:
+      tags:
+        - "Resource"
+      summary: "Get all resources"
+      operationId: "Resources"
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            example: 10
+        - name: page
+          in: query
+          schema:
+            type: integer
+            example: 2
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    user_id:
+                      type: integer
+                    title:
+                      type: string
+                    path:
+                      type: string
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+
+  /api/v1/resources/delete/{id}:
+    delete:
+      tags:
+        - "Resource"
+      summary: "Delete resource by ID"
+      operationId: "ResourcesDeleteByID"
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: integer
+            example: 1008
+      responses:
+        "200":
+          description: "Resources deleted successfully"
+        "403":
+          description: "Forbidden Error"
+      security:
+        - bearerAuth: [ ]
+
+
+components:
+  schemas:
+    Category:
+      required:
+        - categories
+        - category_info
+        - title
+        - language_code
+        - ordering
+        - parent_id
+        - category_info
+      type: object
+      properties:
+        parent_id:
+          type: integer
+          format: int64
+          example: 10
+          description: If the category is parent  category need send 0
+        ordering:
+          type: integer
+          format: int64
+          example: 10
+        category_info:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+                example: Development
+              language_code:
+                type: string
+                example: "hy"
+    Course:
+      required:
+        - id
+        - type
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+                example: 1
+              type:
+                type: integer
+                format: int64
+                example: 1
+              category_id:
+                type: integer
+                format: int64
+                example: 1
+              trainer_id:
+                type: integer
+                format: int64
+                example: 1
+              title:
+                type: string
+                example: title course
+              sub_title:
+                type: string
+                example: sub title course
+              description:
+                type: string
+                example: description course
+              language:
+                type: integer
+                example: 1
+              status:
+                type: integer
+                example: 1
+              price:
+                type: integer
+                example: 1.1
+              max_participants:
+                type: integer
+                example: 1
+              level:
+                type: number
+                example: 1.1
+              currency:
+                type: string
+              promo_video:
+                type: string
+                format: binary
+              cover_image:
+                type: string
+                format: binary
+              lessons:
+                type: array
+                xml:
+                  wrapped: true
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      example: Laravel
+                    course_id:
+                      type: integer
+                      example: 1
+                    duration:
+                      type: integer
+                      example: 1
+                    start_time:
+                      type: string
+                      example: 2022-10-10 10:12:00
+              trainer:
+                type: object
+                properties:
+                  first_name:
+                    type: string
+                    example: Trainer
+                  last_name:
+                    type: string
+                    example: Trainer
+                  bio:
+                    type: string
+                    example: bio
+                  avatar:
+                    type: string
+        current_page:
+          type: integer
+          example: 1
+        first_page_url:
+          type: integer
+          example: "string"
+        from:
+          type: integer
+          example: 1
+        last_page:
+          type: integer
+          example: 1
+        last_page_url:
+          type: string
+          example: "http://api.loc/api/v1/courses?page=5"
+        next_page_url:
+          type: string
+          example: "http://api.loc/api/v1/courses?page=4"
+        per_page:
+          type: string
+          example: 1
+        prev_page_url:
+          example: "http://api.loc/api/v1/courses?page=2"
+        to:
+          type: integer
+          example: 1
+        total:
+          type: integer
+          example: 1
+    Trainer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        user_id:
+          type: integer
+          format: int64
+          example: 1
+        first_name:
+          type: string
+        last_name:
+          type: string
+        bio:
+          type: string
+        avatar:
+          type: string
+    Moderator:
+      type: object
+      properties:
+        first_name:
+          type: "string"
+        last_name:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"
+        company_name:
+          type: "string"
+        role_id:
+          type: integer
+          default: 2
+        tax_identity_number:
+          type: "integer"
+    Notification:
+      type: object
+      properties:
+        id:
+          type: "integer"
+        title:
+          type: "string"
+        message:
+          type: "string"
+        type:
+          type: "string"
+        status:
+          type: "integer"
+        created_at:
+          type: "string"
+    Lesson:
+      type: object
+      properties:
+        id:
+          type: "integer"
+        title:
+          type: "string"
+        course_id:
+          type: "integer"
+        section_id:
+          type: "integer"
+        type:
+          type: "string"
+        video_url:
+          type: "string"
+        article:
+          type: "string"
+        position:
+          type: "integer"
+    Question:
+      type: object
+      properties:
+        quiz_id:
+          type: "integer"
+          required: false
+          example: 1
+        section_id:
+          type: "integer"
+          required: false
+          example: 1
+        question:
+          type: "string"
+        answers:
+          type: "array"
+          example: ['answer1', 'answer2']
+        right_answers:
+          type: "array"
+          example: ['right_answer1', 'right_answer2']
+  securitySchemes:
+    bearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+
+
+
+
